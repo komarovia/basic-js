@@ -1,144 +1,107 @@
 const CustomError = require("../extensions/custom-error");
 
 class VigenereCipheringMachine {
+    alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+    specSymbol = [" ", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "!", "@", "#", "$", "(", ")", ",", ".", "/", "|", "*", "-", "&", "^", "%", "'", ":", "_", "+", "="];
 
-  constructor(flag = true) {
-    this.flag = flag;
+  constructor(flag = true) { 
+    this.flag = flag; 
   }
 
   encrypt(message, key) {
-    if (!message || !key) throw new Error('Error');
+    if (!message || !key) { throw new Error(); }
 
-    console.log(message);
-    console.log(key);
-
-
-    let alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
-    let specSymbol = [" ", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "!", "@", "#", "$", "(", ")", ",", ".", "/", "|", "*", "-", "&", "^", "%", "'", ":", "_", "+", "="];
-    let square = [
-      ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
-      ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'A'],
-      ['C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'A', 'B'],
-      ['D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'A', 'B', 'C'],
-      ['E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'A', 'B', 'C', 'D'],
-      ['F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'A', 'B', 'C', 'D', 'E'],
-      ['G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'A', 'B', 'C', 'D', 'E', 'F'],
-      ['H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'A', 'B', 'C', 'D', 'E', 'F', 'G'],
-      ['I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'],
-      ['J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'],
-      ['K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'],
-      ['L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'],
-      ['M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'],
-      ['N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M'],
-      ['O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N'],
-      ['P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'],
-      ['Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P'],
-      ['R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q'],
-      ['S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R'],
-      ['T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S'],
-      ['U', 'V', 'W', 'X', 'Y', 'Z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T'],
-      ['V', 'W', 'X', 'Y', 'Z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U'],
-      ['W', 'X', 'Y', 'Z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V'],
-      ['X', 'Y', 'Z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W'],
-      ['Y', 'Z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X'],
-      ['Z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y']];
-
-    message = message.toUpperCase();
+		message = message.toUpperCase();
     key = key.toUpperCase();
-    let c = message;
-    let arr = message.split('');
-    let arr2 = key.split('');
 
-    // if (!this.flag) { arr.reverse(); }
-    // if (!this.flag) { arr2.reverse(); }
+    let linkMessage = message;
+    let arrMessage = message.split('');
+    let arrKey = key.split('');
+    let result = "";
 
-    point: for (let i = 0; i < arr.length; i++) {
-      for (let y = 0; y < specSymbol.length; y++) {
-        if (arr[i] == specSymbol[y]) { arr.splice(i, 1); i--; continue point }
+    point: for (let i = 0; i < arrMessage.length; i++) {
+      for (let y = 0; y < this.specSymbol.length; y++) {
+        if (arrMessage[i] == this.specSymbol[y]) { arrMessage.splice(i, 1); i--; continue point }
       }
     }
 
+    if (arrKey.length > arrMessage.length) {
+      arrKey.splice(arrMessage.length, arrKey.length - arrMessage.length);
+}
 
-    for (let y = 0; y < arr.length; y++) {
-      if (arr.length != arr2.length) { arr2.push(arr2[y]) }
+    for (let y = 0; y < arrMessage.length; y++) {
+      if (arrMessage.length != arrKey.length) { arrKey.push(arrKey[y]) }
       else { break };
     }
 
-    key = arr2.join('');
-    message = arr.join('');
+    key = arrKey.join('');
+    message = arrMessage.join('');
 
-    let s = "";
-    for (let i = 0; i < message.length; i++) {
-      let o = alphabet.indexOf(message[i]);
-      let g = alphabet.indexOf(key[i]);
-      s += square[o][g];
+    for (let i = 0; i < key.length; i++) {
+      let keyI = this.alphabet.indexOf(key[i]);
+      let messageI = this.alphabet.indexOf(message[i]);
+      if ((messageI + keyI) >= 26) { result += this.alphabet[(messageI + keyI) - 26]; }
+      else { result += this.alphabet[messageI + keyI] }
     }
 
-    s = s.split('');
-    arr = c.split('');
+    result = result.split('');
+    arrMessage = linkMessage.split('');
 
-    for (let i = 0; i < arr.length; i++) {
-      for (let y = 0; y < specSymbol.length; y++) {
-        if (arr[i] == specSymbol[y]) { s.splice(i, 0, specSymbol[y]) };
+    for (let i = 0; i < arrMessage.length; i++) {
+      for (let y = 0; y < this.specSymbol.length; y++) {
+        if (arrMessage[i] == this.specSymbol[y]) { result.splice(i, 0, this.specSymbol[y]) };
       }
     }
 
-    // return s.join('');
-    return this.flag ? s.join('') : s.reverse().join('');
+    return this.flag ? result.join('') : result.reverse().join('');
   }
 
   decrypt(message, key) {
-    if (!message || !key) throw new Error('Error');
-    console.log(message);
-    console.log(key);
-
-    let alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
-    let specSymbol = [" ", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "!", "@", "#", "$", "(", ")", ",", ".", "/", "|", "*", "-", "&", "^", "%", "'", ":", "_", "+", "="];
+    if (!message || !key) throw new Error();
 
     message = message.toUpperCase();
     key = key.toUpperCase();
-    let c = message;
-    let arr = message.split('');
-    let arr2 = key.split('');
 
-    // if (!this.flag) { arr.reverse(); }
-    // if (!this.flag) { arr2.reverse(); }
+    let linkMessage = message;
+    let arrMessage = message.split('');
+    let arrKey = key.split('');
+    let result = "";
 
-    point: for (let i = 0; i < arr.length; i++) {
-      for (let y = 0; y < specSymbol.length; y++) {
-        if (arr[i] == specSymbol[y]) { arr.splice(i, 1); i--; continue point }
+    point: for (let i = 0; i < arrMessage.length; i++) {
+      for (let y = 0; y < this.specSymbol.length; y++) {
+        if (arrMessage[i] == this.specSymbol[y]) { arrMessage.splice(i, 1); i--; continue point }
       }
     }
 
-    for (let y = 0; y < arr.length; y++) {
-      if (arr.length != arr2.length) { arr2.push(arr2[y]) }
+    if (arrKey.length > arrMessage.length) {
+      arrKey.splice(arrMessage.length, arrKey.length - arrMessage.length);
+}
+
+    for (let y = 0; y < arrMessage.length; y++) {
+      if (arrMessage.length != arrKey.length) { arrKey.push(arrKey[y]) }
       else { break };
     }
 
-    key = arr2.join('');
-    message = arr.join('');
+    key = arrKey.join('');
+    message = arrMessage.join('');
 
-    let s = "";
     for (let i = 0; i < key.length; i++) {
-      let o = alphabet.indexOf(key[i]);
-      let g = alphabet.indexOf(message[i]);
-      if (o == g) { s += "A"; continue }
-      if ((g + 26 - o) > 26) { s += alphabet[(g + 26 - o) - 26]; }
-      else { s += alphabet[g + 26 - o] }
+      let keyI = this.alphabet.indexOf(key[i]);
+      let messageI = this.alphabet.indexOf(message[i]);
+      if (keyI == messageI) { result += "A"; continue }
+      if ((messageI + 26 - keyI) > 26) { result += this.alphabet[(messageI + 26 - keyI) - 26]; }
+      else { result += this.alphabet[messageI + 26 - keyI] }
     }
-    s = s.split('');
+    result = result.split('');
+    arrMessage = linkMessage.split('');
 
-    if (!this.flag) { arr = c.split('').reverse(); }
-    else { arr = c.split(''); }
-
-    for (let i = 0; i < arr.length; i++) {
-      for (let y = 0; y < specSymbol.length; y++) {
-        if (arr[i] == specSymbol[y]) { s.splice(i, 0, specSymbol[y]) };
+    for (let i = 0; i < arrMessage.length; i++) {
+      for (let y = 0; y < this.specSymbol.length; y++) {
+        if (arrMessage[i] == this.specSymbol[y]) { result.splice(i, 0, this.specSymbol[y]) };
       }
     }
 
-    // return s.join('');
-    return this.flag ? s.join('') : s.reverse().join('');
+    return this.flag ? result.join('') : result.reverse().join('');
   }
 }
 
